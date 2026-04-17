@@ -1,0 +1,134 @@
+/* ── Reset & Base ────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: #0f1117;
+  color: #e0e0e0;
+  line-height: 1.5;
+  padding: 0 1rem;
+}
+
+header {
+  text-align: center;
+  padding: 1.5rem 0 0.5rem;
+}
+header h1 { font-size: 1.6rem; color: #fff; }
+header .subtitle { font-size: 0.85rem; color: #888; margin-top: 0.25rem; }
+
+main { max-width: 1100px; margin: 0 auto 2rem; }
+
+footer {
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.75rem;
+  color: #555;
+}
+
+h2 {
+  font-size: 1.1rem;
+  margin: 1.5rem 0 0.75rem;
+  color: #ccc;
+  border-bottom: 1px solid #2a2d35;
+  padding-bottom: 0.4rem;
+}
+
+/* ── Summary Cards ──────────────────────────────────── */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+.card {
+  background: #1a1d27;
+  border: 1px solid #2a2d35;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+}
+.card-label { font-size: 0.75rem; color: #888; text-transform: uppercase; letter-spacing: 0.05em; }
+.card-value { font-size: 1.6rem; font-weight: 700; margin-top: 0.35rem; color: #4fc3f7; }
+.card-error { color: #ef5350; }
+
+/* ── Tables ─────────────────────────────────────────── */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+thead { background: #1a1d27; }
+th {
+  text-align: left;
+  padding: 0.5rem 0.6rem;
+  color: #999;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  border-bottom: 2px solid #2a2d35;
+}
+td {
+  padding: 0.45rem 0.6rem;
+  border-bottom: 1px solid #1e2028;
+}
+tbody tr:hover { background: #1e2230; cursor: pointer; }
+
+.seq { font-family: "SF Mono", "Fira Code", monospace; font-size: 0.8rem; }
+.badge {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+.badge-ok { background: #1b5e20; color: #a5d6a7; }
+.badge-err { background: #b71c1c; color: #ef9a9a; }
+.badge-partial { background: #e65100; color: #ffcc80; }
+
+.bar-bg {
+  background: #2a2d35;
+  border-radius: 4px;
+  height: 8px;
+  width: 100%;
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s;
+}
+.bar-green { background: #4caf50; }
+.bar-red   { background: #ef5350; }
+
+/* ── Modal ──────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.65);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 100;
+}
+.modal-overlay.hidden { display: none; }
+.modal {
+  background: #1a1d27;
+  border: 1px solid #2a2d35;
+  border-radius: 10px;
+  padding: 1.5rem;
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+}
+.modal-close {
+  position: absolute; top: 0.6rem; right: 0.8rem;
+  background: none; border: none; color: #888;
+  font-size: 1.4rem; cursor: pointer;
+}
+.modal-close:hover { color: #fff; }
+
+.step-row { display: flex; gap: 0.5rem; align-items: center; padding: 0.3rem 0; font-size: 0.85rem; }
+.step-idx { color: #666; width: 2rem; text-align: right; }
+.step-zone { font-family: monospace; }
+.step-ok { color: #4caf50; }
+.step-bad { color: #ef5350; font-weight: 600; }

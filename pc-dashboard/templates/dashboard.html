@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Process Adherence Dashboard</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <h1>Process Adherence Dashboard</h1>
+    <p class="subtitle">Edge System Cycle Data &amp; Analytics</p>
+  </header>
+
+  <main>
+    <!-- ── Summary Cards ─────────────────────────────────── -->
+    <section id="summary-cards" class="cards">
+      <div class="card">
+        <div class="card-label">Total Cycles</div>
+        <div class="card-value" id="total-cycles">—</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Completed</div>
+        <div class="card-value" id="completed-cycles">—</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Total Errors</div>
+        <div class="card-value card-error" id="total-errors">—</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Avg Cycle Time</div>
+        <div class="card-value" id="avg-cycle-time">—</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Recent Error Rate</div>
+        <div class="card-value" id="recent-error-rate">—</div>
+      </div>
+    </section>
+
+    <!-- ── Per-Trim Breakdown ────────────────────────────── -->
+    <section id="trim-section">
+      <h2>Performance by Trim Level</h2>
+      <table id="trim-table">
+        <thead>
+          <tr>
+            <th>Trim</th>
+            <th>Total Cycles</th>
+            <th>Perfect (0 errors)</th>
+            <th>Total Errors</th>
+            <th>Avg Time (s)</th>
+            <th>Success Rate</th>
+          </tr>
+        </thead>
+        <tbody id="trim-tbody"></tbody>
+      </table>
+    </section>
+
+    <!-- ── Recent Cycles ─────────────────────────────────── -->
+    <section id="cycles-section">
+      <h2>Recent Cycles</h2>
+      <table id="cycles-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Time</th>
+            <th>Trim</th>
+            <th>Expected</th>
+            <th>Observed</th>
+            <th>Cycle Time</th>
+            <th>Errors</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="cycles-tbody"></tbody>
+      </table>
+    </section>
+
+    <!-- ── Cycle Detail Modal ────────────────────────────── -->
+    <div id="modal-overlay" class="modal-overlay hidden" onclick="closeModal()">
+      <div class="modal" onclick="event.stopPropagation()">
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+        <h2>Cycle Detail</h2>
+        <div id="modal-body"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>Auto-refreshes every 5 seconds &middot; Data from edge MQTT</p>
+  </footer>
+
+  <script src="/static/dashboard.js"></script>
+</body>
+</html>
