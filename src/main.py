@@ -52,6 +52,14 @@ def main() -> None:
         "--mqtt-port", type=int, default=1883,
         help="MQTT broker port (default: 1883)",
     )
+    run_parser.add_argument(
+        "--stats", action="store_true",
+        help="Collect per-frame pipeline latency stats and write CSV on exit.",
+    )
+    run_parser.add_argument(
+        "--stats-csv", type=str, default="pipeline_stats.csv",
+        help="Output path for stats CSV (default: pipeline_stats.csv)",
+    )
 
     # ── init-trims sub-command ───────────────────────────────────
     trims_parser = subparsers.add_parser(
@@ -61,6 +69,42 @@ def main() -> None:
         "--trims", type=str, default=None,
         help="Output path (default: config/trims.json)",
     )
+
+    # ── benchmark sub-command ────────────────────────────────────
+    bench_parser = subparsers.add_parser(
+        "benchmark", help="Benchmark edge vs cloud inference latency."
+    )
+    bench_parser.add_argument("--camera", type=int, default=0)
+    bench_parser.add_argument("--frames", type=int, default=100,
+                              help="Number of frames to benchmark (default: 100)")
+    bench_parser.add_argument("--mqtt-host", type=str, default="localhost")
+    bench_parser.add_argument("--mqtt-port", type=int, default=1883)
+    bench_parser.add_argument("--config", type=str, default=None)
+    bench_parser.add_argument("--model", type=str, default="yolov8n-pose.pt")
+    bench_parser.add_argument("--conf", type=float, default=0.45)
+    bench_parser.add_argument("--output", type=str, default="benchmark_results.csv")
+
+    # ── benchmark-server sub-command ─────────────────────────────
+    bsrv_parser = subparsers.add_parser(
+        "benchmark-server", help="Run the cloud simulation server for benchmarking."
+    )
+    bsrv_parser.add_argument("--mqtt-host", type=str, default="localhost")
+    bsrv_parser.add_argument("--mqtt-port", type=int, default=1883)
+    bsrv_parser.add_argument("--config", type=str, default=None)
+    bsrv_parser.add_argument("--model", type=str, default="yolov8n-pose.pt")
+    bsrv_parser.add_argument("--conf", type=float, default=0.45)
+
+    # ── resource-monitor sub-command ─────────────────────────────
+    res_parser = subparsers.add_parser(
+        "resource-monitor",
+        help="Log CPU/GPU/memory utilization on Jetson Nano.",
+    )
+    res_parser.add_argument("--duration", type=int, default=60,
+                            help="Monitoring duration in seconds (default: 60)")
+    res_parser.add_argument("--interval", type=int, default=1000,
+                            help="Sample interval in milliseconds (default: 1000)")
+    res_parser.add_argument("--output", type=str, default="resource_stats.csv",
+                            help="Output CSV path (default: resource_stats.csv)")
 
     args = parser.parse_args()
 
@@ -90,6 +134,8 @@ def main() -> None:
             confidence=args.conf,
             mqtt_host=args.mqtt_host,
             mqtt_port=args.mqtt_port,
+            collect_stats=args.stats,
+            stats_csv=args.stats_csv,
         )
         runner.run()
 
@@ -100,6 +146,44 @@ def main() -> None:
             create_sample_trims(args.trims)
         else:
             create_sample_trims()
+
+    elif args.mode == "benchmark":
+        from src.benchmark import Benchmark
+
+        bench = Benchmark(
+            camera_index=args.camera,
+            num_frames=args.frames,
+            broker_host=args.mqtt_host,
+            broker_port=args.mqtt_port,
+            config_path=args.config,
+            yolo_model=args.model,
+            confidence=args.conf,
+            output_csv=args.output,
+        )
+        bench.run()
+
+    elif args.mode == "benchmark-server":
+        from src.benchmark_server import CloudSimServer
+
+        server = CloudSimServer(
+            broker_host=args.mqtt_host,
+            broker_port=args.mqtt_port,
+            config_path=args.config,
+            yolo_model=args.model,
+            confidence=args.conf,
+        )
+        server.run()
+
+    elif args.mode == "resource-monitor":
+        from src.resource_monitor import main as rm_main
+        # re-inject parsed args so resource_monitor doesn't re-parse
+        sys.argv = [
+            "resource_monitor",
+            "--duration", str(args.duration),
+            "--interval", str(args.interval),
+            "--output", args.output,
+        ]
+        rm_main()
 
     else:
         parser.print_help()

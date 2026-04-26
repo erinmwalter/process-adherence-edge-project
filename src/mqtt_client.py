@@ -41,6 +41,7 @@ class MQTTClient:
 
         self._trim_callback: Optional[Callable[[str], None]] = None
         self._connected = False
+        self._bytes_sent: list[int] = []
 
     # ── connection ───────────────────────────────────────────────
 
@@ -82,7 +83,13 @@ class MQTTClient:
     def publish_cycle(self, cycle_data: dict) -> None:
         """Publish cycle result to the cycle topic."""
         payload = json.dumps(cycle_data)
+        self._bytes_sent.append(len(payload.encode("utf-8")))
         self._client.publish(self._cycle_topic, payload)
+
+    @property
+    def bytes_sent_log(self) -> list[int]:
+        """List of payload sizes (bytes) for each published cycle."""
+        return self._bytes_sent
 
     @property
     def is_connected(self) -> bool:
@@ -97,6 +104,7 @@ class DummyMQTTClient:
 
     def __init__(self) -> None:
         self._trim_callback: Optional[Callable[[str], None]] = None
+        self._bytes_sent: list[int] = []
 
     def connect(self) -> None:
         print("MQTT disabled — running in offline mode.")
@@ -108,7 +116,13 @@ class DummyMQTTClient:
         self._trim_callback = callback
 
     def publish_cycle(self, cycle_data: dict) -> None:
+        payload = json.dumps(cycle_data)
+        self._bytes_sent.append(len(payload.encode("utf-8")))
         print(f"[OFFLINE] Cycle data: {json.dumps(cycle_data, indent=2)}")
+
+    @property
+    def bytes_sent_log(self) -> list[int]:
+        return self._bytes_sent
 
     def inject_trim(self, trim_level: str) -> None:
         """Manually inject a trim level (for testing without a broker)."""

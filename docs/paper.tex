@@ -27,41 +27,34 @@
 \textit{University of Michigan - Dearborn}\\
 Dearborn, MI \\
 erinwalt@umich.edu}
-% Add more authors as needed:
-% \and
-% \IEEEauthorblockN{2\textsuperscript{nd} Author Name}
-% \IEEEauthorblockA{\textit{Department of Electrical and Computer Engineering} \\
-% \textit{University of Michigan}\\
-% Ann Arbor, MI, USA \\
-% email2@umich.edu}
 }
 
 \maketitle
 
 % ================================================================
 \begin{abstract}
-Process adherence in manufacturing assembly lines is critical for quality assurance, yet many existing monitoring approaches rely on cloud-based video analytics that introduce unacceptable latency for real-time operator feedback and raise privacy concerns by streaming raw video off the factory floor. This paper presents an edge-based computer vision system that monitors operator pick-sequence adherence in real time using a Jetson Nano. The system uses YOLOv8n-pose estimation to track operator wrist positions, maps them to user-defined bin zones via point-in-polygon checks, and compares the observed pick order against trim-level-specific expected sequences. When a deviation is detected, the operator receives an immediate on-screen alert. Only lightweight structured results are transmitted over MQTT to a PC dashboard for long-term analytics and supervisor review. We evaluate the system's inference latency, resource utilization, and network efficiency, demonstrating that edge deployment reduces feedback latency by over an order of magnitude compared to a cloud-based alternative while consuming less than 1\% of the network bandwidth required by video streaming.
+Process adherence in manufacturing assembly lines is critical for quality assurance, yet many existing monitoring approaches rely on software-only, cloud-based video analytics that introduce unacceptable latency for real-time operator feedback and raise privacy concerns by streaming raw video data off the factory floor. This paper presents an edge-based computer vision system that monitors operator pick-sequence adherence in real time using a Jetson Nano. The system uses YOLOv8n-pose estimation to track operator wrist positions, maps them to user-defined bin zones via point-in-polygon checks, and compares the observed pick order against trim-level-specific expected sequences. When a deviation is detected, the operator receives an immediate on-screen alert. Only lightweight structured results are transmitted over MQTT to a PC dashboard for long-term analytics and supervisor review. We evaluate the system's inference latency, resource utilization, and network efficiency, demonstrating that edge deployment reduces feedback latency by over an order of magnitude compared to a PC-based alternative while consuming less than 1\% of the network bandwidth required by video streaming.
 \end{abstract}
 
 % ================================================================
 \section{Introduction}
 
 \subsection{Problem Motivation}
-In automotive and mixed-model manufacturing, operators at assembly stations must pick parts from multiple bins and assemble them in a specific order that can vary by vehicle trim level. Picking and assembling the wrong part or performing the tasks in the wrong sequence leads to quality defects, rework, and potential safety issues. Manual supervision does not scale, and defects are often caught only at end-of-line inspection, far from where the error occurred. This can lead to expensive fixes at a suboptimal time in the manufacturing process where the assembled piece is no longer easily accessible or fixable, or costly recalls of the vehicle or product.
+In automotive and mixed-model manufacturing, operators at assembly stations must pick parts from multiple bins and assemble them in a specific order that can vary by vehicle trim level. Picking and assembling the wrong part or performing the tasks in the wrong sequence leads to quality defects, rework, recalls, and potential safety issues. Manual supervision does not scale, and defects are often caught only at end-of-line inspection, far from where the error occurred. This can lead to expensive fixes at a suboptimal time in the manufacturing process where the assembled piece is no longer easily accessible or fixable, or costly recalls of the vehicle or product.
 
 \subsection{Why Edge Computing}
-Real-time operator feedback requires extremely low latency---an alert must appear within milliseconds of a deviation to be useful, while the operator's hand is still in motion. Cloud-based video analytics introduce round-trip network latency (typically 100--500\,ms depending on infrastructure), making real-time corrective feedback impractical. Additionally, continuously streaming raw video from the factory floor to a remote server consumes significant bandwidth and raises operator privacy and data sovereignty concerns. Edge computing solves both problems: inference runs locally on the device, providing immediate feedback, and raw video never leaves the workstation \cite{b8, b9}.
+Real-time operator feedback requires extremely low latency. An alert must appear within milliseconds of a deviation to be useful, while the operator's hand is still in motion. Centralized video analytics, whether cloud-hosted or running on a local server on the plant floor, introduce round-trip network latency (typically 100--500\,ms depending on infrastructure), making real-time corrective feedback impractical. Additionally, continuously streaming raw video from the factory floor to a centralized server consumes significant bandwidth and raises operator privacy and data sovereignty concerns. Edge computing solves both problems: inference runs locally on the device, providing immediate feedback, and raw video never leaves the workstation \cite{b8, b9}.
 
 \subsection{Existing Solutions and Their Limitations}
 Existing process monitoring solutions in manufacturing generally fall into several categories:
 
 \textbf{Cloud-based video analytics platforms} (e.g., AWS Panorama, Azure Video Analyzer): These provide powerful ML inference but require network round-trips that add latency. They also require streaming raw video off-premises, consuming bandwidth and raising privacy concerns.
 
-\textbf{Fixed sensor arrays and light-curtain systems}: These detect hand presence in bin areas using infrared break-beams or light curtains. They are reliable but expensive to install, inflexible to layout changes, and cannot distinguish between operators or detect the specific sequence of picks.
+\textbf{Fixed sensor arrays and light-curtain systems}: These detect hand presence in bin areas using infrared break-beams or light curtains. They are reliable but expensive to install, inflexible to layout changes or line rebalances, and cannot distinguish between operators or detect the specific sequence of picks.
 
 \textbf{Barcode/RFID scanning systems}: Operators scan parts before installation. These are accurate but add manual steps that slow cycle time and are often bypassed under production pressure.
 
-\textbf{Manual quality audits}: Supervisors periodically observe operators. This does not scale and provides no real-time feedback.
+\textbf{Manual quality audits}: Supervisors periodically observe operators. This does not scale and provides no real-time feedback. Additionally, operators tend to perform at their best when they know they are being observed, but may revert to less disciplined habits once the supervisor moves on, a well-documented phenomenon known as the Hawthorne effect. Continuous automated monitoring eliminates this bias.
 
 None of these approaches provide real-time, camera-based sequence validation with immediate visual feedback at low cost and without streaming raw video off-device.
 
@@ -307,6 +300,8 @@ The system consists of two independently deployable components:
 
 \textbf{Line simulator} (\texttt{line\_simulator.py}): Publishes randomized trim messages at configurable intervals to simulate vehicles arriving, enabling end-to-end testing without a real production line.
 
+\textbf{Prototype test setup:} Because the system is designed for a production assembly line that was not available for continuous testing, we simulate the pick-sequence task using plastic balls of different colors (red, green, blue) placed in separate bins. Each bin represents a part location, and the color serves as a visual proxy for distinct part types across trim levels. The edge application's HSV color detection module identifies which colored parts are present in each zone, providing a secondary visual confirmation alongside the wrist-tracking-based sequence validation. This tabletop setup allows realistic end-to-end testing of the full pipeline---zone configuration, wrist tracking, sequence validation, deviation alerting, and MQTT reporting---without requiring access to a live factory environment.
+
 \subsection{Tools, Frameworks, and Hardware}
 
 \begin{table}[htbp]
@@ -344,6 +339,76 @@ PC frontend & HTML/CSS/JavaScript \\
 
 \subsection{Experiment Setup}
 We evaluated the system along four dimensions: inference latency, end-to-end feedback latency, resource utilization, and network bandwidth consumption.
+
+To produce a fair comparison between edge and centralized processing, we built a \textit{benchmark mode} that measures both paths on identical captured frames. Fig.~\ref{fig:benchmark_arch} illustrates the two measurement paths:
+
+\begin{itemize}
+    \item \textbf{Edge path:} Frames are processed entirely on-device---YOLO inference, zone check, and alert rendering occur in the same loop iteration. Per-stage timestamps are recorded using high-resolution timers.
+    \item \textbf{Centralized path (simulated):} The same frames are JPEG-encoded and sent via MQTT to a cloud simulation server running on the PC. The server performs the identical YOLO + zone-check pipeline and publishes the result back over MQTT. The full round-trip latency is measured on the edge device.
+\end{itemize}
+
+% --- Benchmark Architecture Diagram ---
+\begin{figure}[htbp]
+\centering
+\resizebox{\columnwidth}{!}{%
+\begin{tikzpicture}[
+    node distance=0.4cm and 0.5cm,
+    block/.style={rectangle, draw, rounded corners, minimum height=0.65cm, minimum width=1.6cm, align=center, font=\scriptsize},
+    edgeblock/.style={block, fill=red!10, draw=red!60!black},
+    pcblock/.style={block, fill=blue!10, draw=blue!60!black},
+    mqttblock/.style={block, fill=orange!15, draw=orange!60!black},
+    timer/.style={block, fill=green!12, draw=green!50!black, dashed},
+    arr/.style={-{Stealth[length=1.8mm]}, thick},
+    darr/.style={-{Stealth[length=1.8mm]}, thick, dashed, gray!70},
+    pathlabel/.style={font=\scriptsize\bfseries, rounded corners, inner sep=3pt},
+]
+
+% ======== EDGE PATH (top) ========
+\node[pathlabel, fill=red!10, draw=red!60!black] (elabel) {Edge Path};
+\node[edgeblock, right=0.4cm of elabel] (ecam) {Captured\\Frames};
+\node[edgeblock, right=of ecam] (eyolo) {YOLOv8n\\-Pose};
+\node[edgeblock, right=of eyolo] (ezone) {Zone\\Check};
+\node[edgeblock, right=of ezone] (ealert) {Alert\\Render};
+
+\draw[arr] (ecam) -- (eyolo);
+\draw[arr] (eyolo) -- (ezone);
+\draw[arr] (ezone) -- (ealert);
+
+% Timer spanning edge path
+\node[timer, fit=(ecam)(eyolo)(ezone)(ealert), inner sep=0.2cm,
+      label={[font=\tiny, green!50!black]below:$t_{\text{edge}}$ (per-stage timestamps)}] (etimer) {};
+
+% ======== CLOUD PATH (bottom) ========
+\node[pathlabel, fill=blue!10, draw=blue!60!black, below=1.8cm of elabel] (clabel) {Centralized Path};
+\node[edgeblock, right=0.4cm of clabel] (ccam) {Captured\\Frames};
+\node[edgeblock, right=of ccam] (cjpeg) {JPEG\\Encode};
+\node[mqttblock, right=of cjpeg] (cmqtt1) {MQTT\\Publish};
+\node[pcblock, right=of cmqtt1] (cyolo) {YOLOv8n\\-Pose};
+\node[pcblock, right=of cyolo] (czone) {Zone\\Check};
+\node[mqttblock, below=0.5cm of czone] (cmqtt2) {MQTT\\Response};
+\node[edgeblock, left=of cmqtt2] (crecv) {Receive\\Result};
+
+\draw[arr] (ccam) -- (cjpeg);
+\draw[arr] (cjpeg) -- (cmqtt1);
+\draw[arr] (cmqtt1) -- node[above, font=\tiny]{network} (cyolo);
+\draw[arr] (cyolo) -- (czone);
+\draw[arr] (czone) -- (cmqtt2);
+\draw[arr] (cmqtt2) -- node[above, font=\tiny]{network} (crecv);
+
+% Timer spanning cloud path
+\draw[green!50!black, dashed, thick, rounded corners]
+    ($(ccam.north west)+(-0.1,0.15)$) rectangle ($(crecv.south east)+(0.1,-0.15)$);
+\node[font=\tiny, green!50!black, below=0.05cm of crecv] {$t_{\text{round\text{-}trip}}$ (end-to-end)};
+
+% Tier labels on the right
+\node[font=\tiny\itshape, red!60!black, right=0.15cm of cmqtt1.north east, anchor=south west] {Edge};
+\node[font=\tiny\itshape, blue!60!black, right=0.15cm of cyolo.north east, anchor=south west] {PC};
+
+\end{tikzpicture}%
+}% end resizebox
+\caption{Benchmark mode architecture. Both paths process identical frames. The edge path measures per-stage latency locally; the centralized path measures the full round-trip through MQTT to a PC-based cloud simulation server running the same inference pipeline.}
+\label{fig:benchmark_arch}
+\end{figure}
 
 % TODO: Fill in your actual test environment details
 \textbf{Test environment:}
@@ -428,6 +493,38 @@ Bandwidth reduction & $>$99\% & --- \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\subsection{Detection Accuracy}
+To evaluate the system's correctness, we measured detection accuracy over multiple monitored cycles using our prototype test setup with colored bins. We define two levels of accuracy:
+
+\textbf{Step-level accuracy:} The fraction of individual pick steps where the system correctly identified the zone the operator reached into (i.e., the detected zone matched the ground-truth zone). Errors at this level correspond to false zone entries (the system registers a zone the operator did not actually reach into) or missed entries (the operator reached into a zone but the system did not detect it).
+
+\textbf{Cycle-level pass rate:} The fraction of complete cycles where the observed pick sequence exactly matched the expected sequence with zero deviations.
+
+\begin{table}[htbp]
+\caption{Detection Accuracy Results}
+\label{tab:accuracy}
+\centering
+\begin{tabular}{lc}
+\toprule
+\textbf{Metric} & \textbf{Value} \\
+\midrule
+Total cycles tested & [TODO] \\
+Completed cycles & [TODO] \\
+Perfect cycles (0 errors) & [TODO] \\
+Cycle-level pass rate & [TODO]\,\% \\
+\midrule
+Total pick steps & [TODO] \\
+Correctly detected steps & [TODO] \\
+Step-level accuracy & [TODO]\,\% \\
+\midrule
+False zone entries & [TODO] \\
+Missed zone entries & [TODO] \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The primary sources of detection error are: (1) pose estimation inaccuracy near zone boundaries, where the predicted wrist coordinate falls inside an adjacent zone; (2) rapid hand movement that passes through a zone too quickly for the 5-frame debounce window to register; and (3) occlusion, where the operator's body blocks the camera's view of the wrist. The debounce mechanism (Section~III-B) is the main design lever for trading off between false positives (false zone entries from jitter) and false negatives (missed entries from brief zone visits). The current 5-frame threshold was chosen empirically to minimize both error types at normal operator speeds.
 
 % ================================================================
 \section{Demonstration / Results}
@@ -660,6 +757,7 @@ Fig.~\ref{fig:sequence} shows the full message flow for a single monitoring cycl
     \item \textbf{Zone boundary precision:} Very closely spaced bins may cause ambiguous zone entries due to pose estimation noise, even with debounce. Physical bin spacing of at least 15--20\,cm provides reliable results.
     \item \textbf{Static zone configuration:} If bins are moved, the zone configuration must be redrawn. An auto-calibration or fiducial marker-based approach could automate zone detection.
     \item \textbf{No persistent on-device logging:} The edge device does not store cycle results locally; if MQTT is down, cycle data is lost (though the operator still receives alerts). Adding local buffering with store-and-forward would improve data completeness.
+    \item \textbf{2D camera limitations:} The system uses a single 2D RGB camera, which means zone detection relies on projecting 3D hand movements onto a 2D image plane. This works well when the camera is mounted overhead or at an angle where bins are spatially separated in the image, but can introduce ambiguity when bins overlap in the camera's field of view or when the operator's hand moves primarily along the camera's depth axis. Critically, a 2D camera cannot distinguish depth: an operator's hand may appear to be directly over a bin or installation point in the image while actually being far in front of or behind it. This lack of depth information means the system can only verify \textit{where} in the image the hand went, not whether the hand physically reached the target. A 3D depth camera (e.g., Intel RealSense, Azure Kinect) would provide true spatial coordinates, enabling verification of actual contact or proximity and eliminating projection ambiguities, at the cost of higher hardware expense and increased computational load for processing point clouds or depth maps \cite{b11}.
 \end{itemize}
 
 \subsection{Future Improvements}
@@ -670,6 +768,7 @@ Fig.~\ref{fig:sequence} shows the full message flow for a single monitoring cycl
     \item Model optimization using TensorRT to accelerate YOLOv8n-pose inference on the Jetson Nano's GPU, potentially doubling throughput.
     \item Richer dashboard analytics including trend analysis, shift-level comparisons, and automated quality reports.
     \item Audio alerts in addition to visual, as operators may not always be looking at the monitor.
+    \item Depth-sensing camera integration (e.g., Intel RealSense \cite{b12}) to verify actual hand-to-bin proximity and eliminate false zone entries caused by 2D projection ambiguity.
 \end{itemize}
 
 % ================================================================
@@ -687,6 +786,9 @@ We presented an edge-based computer vision system for real-time process adherenc
 \bibitem{b7} A. Banks and R. Gupta, ``MQTT Version 3.1.1,'' OASIS Standard, 2014. [Online]. Available: \url{https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html}
 \bibitem{b8} W. Shi, J. Cao, Q. Zhang, Y. Li, and L. Xu, ``Edge Computing: Vision and Challenges,'' \textit{IEEE Internet of Things Journal}, vol. 3, no. 5, pp. 637--646, Oct. 2016.
 \bibitem{b9} S. Satyanarayanan, ``The Emergence of Edge Computing,'' \textit{Computer}, vol. 50, no. 1, pp. 30--39, Jan. 2017.
+\bibitem{b10} A. Levitt and J. A. List, ``Was There Really a Hawthorne Effect at the Hawthorne Plant? An Analysis of the Original Illumination Experiments,'' \textit{American Economic Journal: Applied Economics}, vol. 3, no. 1, pp. 224--238, Jan. 2011.
+\bibitem{b11} I. Van Crombrugge, S. Sels, B. Ribbens, and G. Steenackers, ``Accuracy Assessment of Joint Angles Estimated from 2D and 3D Camera Measurements,'' \textit{Sensors}, vol. 22, no. 5, p. 1729, 2022.
+\bibitem{b12} Intel Corporation, ``Intel RealSense Depth and Tracking Cameras,'' 2023. [Online]. Available: \url{https://www.intelrealsense.com/}
 \end{thebibliography}
 
 \end{document}
