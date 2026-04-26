@@ -20,7 +20,7 @@ from typing import List, Optional, Dict
 from .zone_manager import ZoneManager
 
 
-DEBOUNCE_FRAMES = 5  # wrist must be in zone for N frames to count as entry
+DEBOUNCE_FRAMES = 25  # wrist must be in zone for N frames to count as entry
 
 
 @dataclass
@@ -189,10 +189,6 @@ class SequenceTracker:
         ):
             self._prev_zone = current_zone
             return self._record_zone_entry(current_zone)
-
-        # if wrist left all zones, reset prev_zone so re-entry counts
-        if current_zone is None and self._zone_frame_count >= DEBOUNCE_FRAMES:
-            self._prev_zone = None
 
         return None
 
