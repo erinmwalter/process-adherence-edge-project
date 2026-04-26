@@ -1,5 +1,5 @@
 {
-  "A": ["pick_1", "walking", "working"],
-  "B": ["pick_2", "walking", "working"],
-  "C": ["pick_3", "walking", "working"]
+  "A": ["A", "walk", "work"],
+  "B": ["B", "walk", "work"],
+  "C": ["C", "walk", "work"]
 }
