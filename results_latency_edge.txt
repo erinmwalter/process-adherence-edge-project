@@ -1,0 +1,24 @@
+LATENCY SIMULATION RESULTS
+Samples: 100  |  Network RTT: +300.0ms  |  Broker: localhost:1883
+Edge model: Jetson Nano YOLOv8n-pose (CUDA), mean=33.0ms
+
+==============================================================
+LATENCY COMPARISON  (paper Section 4.3)
+==============================================================
+  Metric                              Edge (ms)   Cloud (ms)
+  ----------------------------------------------------------
+  Mean latency                             33.8        324.1
+  Median latency                           33.9        324.4
+  P95 latency                              43.9        331.5
+  Min latency                              23.3        312.0
+  Max latency                              45.9        333.4
+
+  Speedup (cloud / edge): 9.6x
+==============================================================
+
+Paper table values:
+  Edge feedback latency   : ~34 ms  (Jetson Nano, simulated)
+  Cloud feedback latency  : ~324 ms  (MQTT RTT + 300.0ms network + inference)
+  Speedup                 : 9.6x
+  Note: edge numbers based on YOLOv8n-pose Jetson Nano benchmarks;
+        run 'python -m src.main benchmark' on real Jetson for measured values.

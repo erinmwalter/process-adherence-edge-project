@@ -1,0 +1,32 @@
+(base) erinwalter@Erins-MBP process-adherence-edge-project % python bandwidth_sim.py --frames 100
+
+Encoding 100 synthetic 640x480 frames at JPEG quality=80...
+Done in 0.76s.
+
+==============================================================
+JPEG FRAME SIZE (640x480, synthetic scene)
+==============================================================
+  Frames measured                       100
+  Avg frame size                      43.7 KB
+  Min frame size                      43.4 KB
+  Max frame size                      44.0 KB
+  P95 frame size                      44.0 KB
+
+==============================================================
+BANDWIDTH COMPARISON  (paper Section 4.5)
+==============================================================
+  Metric                                       Edge      Cloud
+  ----------------------------------------------------------
+  Data per frame                                  —     43.7 KB
+  Streaming rate @ 30 fps                         —    1.34 MB/s
+  Data per cycle (~60 s)                      0.49 KB      81 MB
+  Data per hour (est.)                       30.0 KB      4.8 GB
+  Bandwidth reduction                      161,222x          —
+==============================================================
+
+Paper table values:
+  Data per cycle  | Edge: ~500 B  | Cloud: ~81 MB
+  Data per hour   | Edge: ~30 KB   | Cloud: ~4.8 GB
+  Reduction       | >161,222x
+
+(base) erinwalter@Erins-MBP process-adherence-edge-project % 

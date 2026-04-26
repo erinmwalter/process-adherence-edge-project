@@ -1,20 +1,27 @@
 #!/usr/bin/env python3
 """
-Benchmark — measures edge vs cloud latency on the same frames.
+Benchmark — measures edge vs cloud latency and bandwidth on the same frames.
 
 Runs two measurement passes:
   1. EDGE:  capture frame → YOLO + zone check locally → record latency
   2. CLOUD: capture frame → JPEG encode → MQTT to cloud server → wait for
-            MQTT response → record round-trip latency
+            MQTT response → record round-trip latency + bytes sent
 
-Outputs a summary table and per-frame CSV for the paper's evaluation section.
+Also computes bandwidth comparison matching paper Section 4.5:
+  - Cloud path: JPEG streaming rate at 30 fps
+  - Edge path: ~500-byte MQTT cycle result per cycle
+
+Use --synthetic to generate frames without a camera (simulation mode).
 
 Usage:
   # Terminal 1 — start the cloud sim server:
   python -m src.benchmark_server --mqtt-host localhost
 
-  # Terminal 2 — run the benchmark:
+  # Terminal 2 — run with real camera:
   python -m src.benchmark --mqtt-host localhost --frames 100
+
+  # Run in simulation mode (no camera needed):
+  python -m src.benchmark --synthetic --frames 100
 """
 
 import argparse
@@ -38,6 +45,10 @@ TOPIC_FRAME = "benchmark/frame"
 TOPIC_RESULT = "benchmark/result"
 
 
+EDGE_BYTES_PER_CYCLE = 500      # ~500-byte MQTT cycle result (from paper Section 2.4)
+VIDEO_FPS = 30                  # assumed streaming frame rate for bandwidth calc
+
+
 class Benchmark:
     def __init__(
         self,
@@ -49,11 +60,13 @@ class Benchmark:
         yolo_model: str,
         confidence: float,
         output_csv: str,
+        use_synthetic: bool = False,
     ) -> None:
         self.camera_index = camera_index
         self.num_frames = num_frames
         self.config_path = config_path
         self.output_csv = output_csv
+        self.use_synthetic = use_synthetic
 
         # edge-side detector and zone manager
         self.detector = Detector(yolo_model=yolo_model, confidence=confidence)
@@ -70,6 +83,9 @@ class Benchmark:
         self._pending: dict[int, float] = {}   # frame_id → sent_at (perf_counter)
         self._cloud_results: dict[int, dict] = {}
         self._cloud_event = threading.Event()
+
+        # bandwidth tracking
+        self._total_cloud_bytes: int = 0
 
     def _on_connect(self, client, userdata, flags, rc):
         if rc == 0:
@@ -88,6 +104,36 @@ class Benchmark:
             )
             self._cloud_results[fid] = result
             self._cloud_event.set()
+
+    # ── synthetic frame generation ───────────────────────────────
+
+    def _generate_synthetic_frames(self) -> list[np.ndarray]:
+        """Generate realistic-looking synthetic frames without a camera.
+
+        Uses a gradient background with a moving white rectangle to give YOLO
+        something to process (avoids trivially-fast inference on blank frames).
+        """
+        print(f"Generating {self.num_frames} synthetic frames (640x480)...")
+        frames = []
+        h, w = 480, 640
+        rng = np.random.default_rng(seed=42)
+        for i in range(self.num_frames):
+            # gradient base
+            frame = np.zeros((h, w, 3), dtype=np.uint8)
+            frame[:, :, 0] = np.linspace(30, 80, w, dtype=np.uint8)
+            frame[:, :, 1] = np.linspace(20, 60, w, dtype=np.uint8)
+            frame[:, :, 2] = np.linspace(10, 40, w, dtype=np.uint8)
+            # add mild noise
+            frame = np.clip(
+                frame.astype(np.int16) + rng.integers(-15, 15, frame.shape, dtype=np.int16),
+                0, 255,
+            ).astype(np.uint8)
+            # moving rectangle simulating a hand/arm region
+            x = int(w * 0.1 + (w * 0.6) * (i / max(self.num_frames - 1, 1)))
+            cv2.rectangle(frame, (x, 180), (x + 60, 300), (200, 200, 200), -1)
+            frames.append(frame)
+        print(f"Generated {len(frames)} synthetic frames.\n")
+        return frames
 
     # ── edge benchmark ───────────────────────────────────────────
 
@@ -114,11 +160,14 @@ class Benchmark:
     def _run_cloud_pass(self, frames: list[np.ndarray]) -> list[float]:
         """Send each frame to cloud server via MQTT, measure round-trip."""
         latencies = []
+        self._total_cloud_bytes = 0
 
         for i, frame in enumerate(frames):
             # JPEG encode
             _, jpg = cv2.imencode(".jpg", frame, [cv2.IMWRITE_JPEG_QUALITY, 80])
-            b64 = base64.b64encode(jpg.tobytes()).decode("ascii")
+            jpg_bytes = jpg.tobytes()
+            self._total_cloud_bytes += len(jpg_bytes)
+            b64 = base64.b64encode(jpg_bytes).decode("ascii")
 
             self._cloud_event.clear()
             sent_at = time.perf_counter()
@@ -157,25 +206,28 @@ class Benchmark:
         except FileNotFoundError:
             print("WARNING: No zone config, zone checks will be empty")
 
-        # capture frames
-        print(f"\nCapturing {self.num_frames} frames from camera {self.camera_index}...")
-        cap = cv2.VideoCapture(self.camera_index)
-        if not cap.isOpened():
-            print(f"ERROR: Cannot open camera {self.camera_index}")
-            sys.exit(1)
+        # capture or generate frames
+        if self.use_synthetic:
+            frames = self._generate_synthetic_frames()
+        else:
+            print(f"\nCapturing {self.num_frames} frames from camera {self.camera_index}...")
+            cap = cv2.VideoCapture(self.camera_index)
+            if not cap.isOpened():
+                print(f"ERROR: Cannot open camera {self.camera_index}")
+                sys.exit(1)
 
-        frames: list[np.ndarray] = []
-        for _ in range(self.num_frames):
-            ret, frame = cap.read()
-            if not ret:
-                break
-            frames.append(frame)
-        cap.release()
-        print(f"Captured {len(frames)} frames.\n")
+            frames: list[np.ndarray] = []
+            for _ in range(self.num_frames):
+                ret, frame = cap.read()
+                if not ret:
+                    break
+                frames.append(frame)
+            cap.release()
+            print(f"Captured {len(frames)} frames.\n")
 
-        if not frames:
-            print("ERROR: No frames captured.")
-            sys.exit(1)
+            if not frames:
+                print("ERROR: No frames captured.")
+                sys.exit(1)
 
         # --- pass 1: edge ---
         print(f"=== EDGE PASS ({len(frames)} frames) ===")
@@ -194,6 +246,7 @@ class Benchmark:
             print("  Make sure the broker is running and benchmark_server is started.")
             print("  Skipping cloud pass.\n")
             self._print_results(edge_latencies, [])
+            self._print_bandwidth([])
             return
 
         # small delay for subscription to propagate
@@ -211,6 +264,7 @@ class Benchmark:
             print("  No valid cloud responses received.\n")
 
         self._print_results(edge_latencies, cloud_latencies)
+        self._print_bandwidth(cloud_latencies)
         self._write_csv(edge_latencies, cloud_latencies)
 
     def _print_results(self, edge: list[float], cloud: list[float]) -> None:
@@ -256,6 +310,48 @@ class Benchmark:
             if valid_cloud:
                 speedup = statistics.mean(valid_cloud) / statistics.mean(edge)
                 print(f"\n{'Speedup (cloud/edge)':<30} {speedup:>12.1f}x")
+
+        print("=" * 60)
+
+    def _print_bandwidth(self, cloud: list[float]) -> None:
+        """Print bandwidth comparison table matching paper Section 4.5."""
+        valid_cloud = [x for x in cloud if not (x != x)]
+
+        print("\n" + "=" * 60)
+        print("BANDWIDTH COMPARISON (paper Section 4.5)")
+        print("=" * 60)
+        print(f"{'Metric':<38} {'Edge':>10} {'Cloud':>10}")
+        print("-" * 60)
+
+        # --- cloud streaming numbers ---
+        if self._total_cloud_bytes > 0 and len(cloud) > 0:
+            avg_jpeg_bytes = self._total_cloud_bytes / len(cloud)
+            streaming_mbps = (avg_jpeg_bytes * VIDEO_FPS) / 1_000_000
+            streaming_gb_per_hour = streaming_mbps * 3600 / 1000
+            assumed_cycle_s = 60.0
+            cloud_mb_per_cycle = streaming_mbps * assumed_cycle_s
+
+            print(f"{'Avg JPEG frame size':<38} {'—':>10} {avg_jpeg_bytes/1024:>8.1f} KB")
+            print(f"{'Streaming bitrate @ 30fps':<38} {'—':>10} {streaming_mbps:>7.2f} MB/s")
+            print(f"{'Data per cycle (~60s)':<38} {EDGE_BYTES_PER_CYCLE/1024:>8.2f} KB {cloud_mb_per_cycle:>8.0f} MB")
+            print(f"{'Data per hour (est.)':<38} {EDGE_BYTES_PER_CYCLE * 60 / 1e6:>7.2f} MB {streaming_gb_per_hour:>8.1f} GB")
+            reduction = (streaming_mbps * 1_000_000) / (EDGE_BYTES_PER_CYCLE / assumed_cycle_s)
+            print(f"{'Bandwidth reduction':<38} {f'{reduction:.0f}x':>10} {'—':>10}")
+        else:
+            # cloud pass was skipped — report edge-only numbers + theoretical cloud estimate
+            # Use 640×480 JPEG at quality=80, typically ~15-25 KB per frame
+            estimated_jpeg_kb = 20.0
+            streaming_mbps = (estimated_jpeg_kb * 1024 * VIDEO_FPS) / 1_000_000
+            streaming_gb_per_hour = streaming_mbps * 3600 / 1000
+            assumed_cycle_s = 60.0
+            cloud_mb_per_cycle = streaming_mbps * assumed_cycle_s
+            reduction = (streaming_mbps * 1_000_000) / (EDGE_BYTES_PER_CYCLE / assumed_cycle_s)
+
+            print(f"  (Cloud pass skipped — using estimated JPEG size of ~{estimated_jpeg_kb:.0f} KB)")
+            print(f"{'Est. streaming bitrate @ 30fps':<38} {'—':>10} {streaming_mbps:>7.2f} MB/s")
+            print(f"{'Data per cycle (~60s)':<38} {EDGE_BYTES_PER_CYCLE/1024:>8.2f} KB {cloud_mb_per_cycle:>8.0f} MB")
+            print(f"{'Data per hour (est.)':<38} {EDGE_BYTES_PER_CYCLE * 60 / 1e6:>7.2f} MB {streaming_gb_per_hour:>8.1f} GB")
+            print(f"{'Bandwidth reduction':<38} {f'>{reduction:.0f}x':>10} {'—':>10}")
 
         print("=" * 60)
 

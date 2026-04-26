@@ -70,6 +70,40 @@ def main() -> None:
         help="Output path (default: config/trims.json)",
     )
 
+    # ── simulate sub-command ─────────────────────────────────────
+    sim_parser = subparsers.add_parser(
+        "simulate",
+        help="Simulate edge vs cloud latency and bandwidth without a camera.",
+    )
+    sim_parser.add_argument(
+        "--frames", type=int, default=100,
+        help="Number of synthetic frames to benchmark (default: 100)",
+    )
+    sim_parser.add_argument(
+        "--mqtt-host", type=str, default=None,
+        help="MQTT broker hostname for cloud pass (omit to skip cloud comparison)",
+    )
+    sim_parser.add_argument(
+        "--mqtt-port", type=int, default=1883,
+        help="MQTT broker port (default: 1883)",
+    )
+    sim_parser.add_argument(
+        "--config", type=str, default=None,
+        help="Path to zone config JSON (default: config/zones.json)",
+    )
+    sim_parser.add_argument(
+        "--model", type=str, default="yolov8n-pose.pt",
+        help="YOLO model path or name (default: yolov8n-pose.pt)",
+    )
+    sim_parser.add_argument(
+        "--conf", type=float, default=0.45,
+        help="YOLO confidence threshold (default: 0.45)",
+    )
+    sim_parser.add_argument(
+        "--output", type=str, default="benchmark_results.csv",
+        help="Output CSV path (default: benchmark_results.csv)",
+    )
+
     # ── benchmark sub-command ────────────────────────────────────
     bench_parser = subparsers.add_parser(
         "benchmark", help="Benchmark edge vs cloud inference latency."
@@ -146,6 +180,23 @@ def main() -> None:
             create_sample_trims(args.trims)
         else:
             create_sample_trims()
+
+    elif args.mode == "simulate":
+        from src.benchmark import Benchmark
+
+        broker = args.mqtt_host or "localhost"
+        bench = Benchmark(
+            camera_index=0,
+            num_frames=args.frames,
+            broker_host=broker,
+            broker_port=args.mqtt_port,
+            config_path=args.config,
+            yolo_model=args.model,
+            confidence=args.conf,
+            output_csv=args.output,
+            use_synthetic=True,
+        )
+        bench.run()
 
     elif args.mode == "benchmark":
         from src.benchmark import Benchmark

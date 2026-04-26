@@ -1,0 +1,43 @@
+flowchart TB
+    subgraph EDGE ["🟥 Edge Device — Jetson Nano"]
+        direction TB
+        CAM["📷 USB Webcam\n30 fps / 640×480"]
+        YOLO["YOLOv8n-Pose\nWrist Keypoint Extraction"]
+        ZONE["Zone Manager\nPoint-in-Polygon Check"]
+        SEQ["Sequence Tracker\n5-Frame Debounce"]
+        ALERT["Alert System\nFlashing Red Overlay"]
+        DISP["🖥️ Operator Display\nLive Overlay + Status Panel"]
+
+        ZONES_CFG[/"zones.json"/]
+        TRIMS_CFG[/"trims.json"/]
+
+        CAM --> YOLO
+        YOLO -->|"wrist (x,y)"| ZONE
+        ZONE -->|"zone events"| SEQ
+        SEQ -->|"deviation?"| ALERT
+        ALERT --> DISP
+        ZONES_CFG -.-> ZONE
+        TRIMS_CFG -.-> SEQ
+    end
+
+    subgraph MQTT_TIER ["🟧 MQTT Broker — Mosquitto 2.0 (PC)"]
+        BROKER["MQTT Broker\nlocalhost:1883"]
+    end
+
+    subgraph PC ["🟦 PC Tier — MacBook Pro"]
+        direction TB
+        SIM["Line Simulator\nRandom trim messages"]
+        SUB["MQTT Subscriber\nparse cycle JSON"]
+        DB[("SQLite DB\ncycles + steps")]
+        FLASK["Flask Web Server\n/api/summary /api/cycles"]
+        DASH["🌐 Supervisor Dashboard\nAuto-refresh every 5s"]
+
+        SIM -->|"trim level"| BROKER
+        SUB --> DB
+        DB --> FLASK
+        FLASK --> DASH
+    end
+
+    SEQ -->|"CycleResult JSON\n~500 bytes"| BROKER
+    BROKER -->|"process_adherence/cycle"| SUB
+    BROKER -->|"process_adherence/trim"| SEQ

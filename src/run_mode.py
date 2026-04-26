@@ -18,14 +18,13 @@ Controls in run mode:
 """
 
 import time
-from collections import defaultdict
 from typing import Dict, List, Optional
 
 import cv2
 import numpy as np
 
 from .zone_manager import ZoneManager
-from .detector import Detector, PoseDetection, PartDetection
+from .detector import Detector, PoseDetection
 from .sequence_tracker import SequenceTracker, StepEvent
 from .trim_config import TrimConfig
 from .alert_system import AlertSystem
@@ -41,7 +40,6 @@ class PipelineStats:
         self.capture_ms: List[float] = []
         self.inference_ms: List[float] = []
         self.zone_check_ms: List[float] = []
-        self.part_detect_ms: List[float] = []
         self.render_ms: List[float] = []
         self.total_ms: List[float] = []
         self.mqtt_payload_bytes: List[int] = []
@@ -63,11 +61,10 @@ class PipelineStats:
         })
 
     def record(self, capture: float, inference: float, zone_check: float,
-               part_detect: float, render: float, total: float) -> None:
+               render: float, total: float) -> None:
         self.capture_ms.append(capture)
         self.inference_ms.append(inference)
         self.zone_check_ms.append(zone_check)
-        self.part_detect_ms.append(part_detect)
         self.render_ms.append(render)
         self.total_ms.append(total)
 
@@ -93,7 +90,6 @@ class PipelineStats:
             ("Capture", self.capture_ms),
             ("YOLO Inference", self.inference_ms),
             ("Zone Check + Track", self.zone_check_ms),
-            ("Part Detection", self.part_detect_ms),
             ("Render + Display", self.render_ms),
             ("TOTAL", self.total_ms),
         ]
@@ -166,7 +162,7 @@ class PipelineStats:
             writer = _csv.writer(f)
             writer.writerow([
                 "frame", "capture_ms", "inference_ms", "zone_check_ms",
-                "part_detect_ms", "render_ms", "total_ms",
+                "render_ms", "total_ms",
             ])
             for i in range(n):
                 writer.writerow([
@@ -174,7 +170,6 @@ class PipelineStats:
                     round(self.capture_ms[i], 2),
                     round(self.inference_ms[i], 2),
                     round(self.zone_check_ms[i], 2),
-                    round(self.part_detect_ms[i], 2),
                     round(self.render_ms[i], 2),
                     round(self.total_ms[i], 2),
                 ])
@@ -303,7 +298,6 @@ class RunMode:
         self,
         frame: np.ndarray,
         fps: float,
-        zone_parts: Dict[str, List[PartDetection]],
     ) -> None:
         h, w = frame.shape[:2]
         panel_w = 300
@@ -361,23 +355,6 @@ class RunMode:
                          (x0, y), font, 0.5,
                          (0, 0, 255) if self.tracker.error_count else (0, 255, 0), 1)
             y += 25
-
-        # Part inventory per zone
-        for zone_name in sorted(zone_parts.keys()):
-            parts = zone_parts[zone_name]
-            if not parts:
-                continue
-            cv2.putText(frame, f"Zone {zone_name} parts:", (x0, y),
-                         font, 0.45, (255, 255, 255), 1)
-            y += 18
-            color_counts: Dict[str, int] = defaultdict(int)
-            for p in parts:
-                color_counts[p.color_name] += 1
-            for cname, cnt in sorted(color_counts.items()):
-                cv2.putText(frame, f"  {cname}: {cnt}", (x0, y),
-                             font, 0.4, (200, 200, 200), 1)
-                y += 16
-            y += 8
 
         # Keyboard help
         y = h - 60
@@ -497,19 +474,9 @@ class RunMode:
                                     result.error_count, result.completed,
                                 )
 
-                # ── colour part detection per zone ──────────────
-                zone_parts: Dict[str, List[PartDetection]] = defaultdict(list)
-                for zone in self.zone_manager.zones:
-                    mask = self.zone_manager.get_zone_mask(zone, frame.shape)
-                    parts = self.detector.detect_colored_parts(frame, mask=mask)
-                    zone_parts[zone["name"]].extend(parts)
-                t_parts = time.perf_counter()
-
                 # ── drawing ─────────────────────────────────────
                 self.zone_manager.draw_zones(frame)
                 self.detector.draw_poses(frame, poses)
-                for parts_list in zone_parts.values():
-                    self.detector.draw_parts(frame, parts_list)
 
                 # trim banner (top of screen)
                 self._draw_trim_banner(frame)
@@ -522,7 +489,7 @@ class RunMode:
                 fps = 0.9 * fps + 0.1 * (1.0 / max(now - prev_time, 1e-6))
                 prev_time = now
 
-                self._draw_status_panel(frame, fps, zone_parts)
+                self._draw_status_panel(frame, fps)
 
                 cv2.imshow(WINDOW_NAME, frame)
                 t_render = time.perf_counter()
@@ -533,8 +500,7 @@ class RunMode:
                         capture=(t_capture - t_start) * 1000,
                         inference=(t_inference - t_capture) * 1000,
                         zone_check=(t_zone - t_inference) * 1000,
-                        part_detect=(t_parts - t_zone) * 1000,
-                        render=(t_render - t_parts) * 1000,
+                        render=(t_render - t_zone) * 1000,
                         total=(t_render - t_start) * 1000,
                     )
 
