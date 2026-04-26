@@ -14,7 +14,7 @@ at least DEBOUNCE_FRAMES consecutive frames (avoids flickering at edges).
 """
 
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import List, Optional, Dict
 
 from .zone_manager import ZoneManager
@@ -170,8 +170,9 @@ class SequenceTracker:
         # find which zone (if any) the wrist is in (only pick-type zones)
         zones_hit = self.zone_manager.get_zones_for_point(wrist_x, wrist_y)
         # filter to only pick zones for sequence tracking
-        pick_zones = [z for z in zones_hit if z["zone_type"].startswith("pick")]
-        current_zone = pick_zones[0]["name"] if pick_zones else None
+        tracked_zones = [z for z in zones_hit if z["zone_type"].startswith("pick")
+                         or z["zone_type"] in ("walking", "working")]
+        current_zone = tracked_zones[0]["name"] if tracked_zones else None
 
         # debounce logic
         if current_zone == self._pending_zone:
