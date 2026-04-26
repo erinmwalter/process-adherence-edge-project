@@ -1,0 +1,679 @@
+erin@erin-desktop:~/process-adherence-edge-project$ git pull
+Already up to date.
+erin@erin-desktop:~/process-adherence-edge-project$ sudo apt get chromium
+[sudo] password for erin: 
+E: Invalid operation get
+erin@erin-desktop:~/process-adherence-edge-project$ sudo snap install firefox
+firefox 150.0-1 from Mozilla✓ installed
+erin@erin-desktop:~/process-adherence-edge-project$ snap download snapd --revision=24724
+Fetching snap "snapd"
+Fetching assertions for "snapd"
+Install the snap with:
+   snap ack snapd_24724.assert
+   snap install snapd_24724.snap
+erin@erin-desktop:~/process-adherence-edge-project$ sudo snap ack snapd_24724.assert
+erin@erin-desktop:~/process-adherence-edge-project$ sudo snap install snapd_24724.snap
+2026-04-26T16:26:13-04:00 INFO Waiting for automatic snapd restart...
+2026-04-26T16:26:14-04:00 INFO Waiting for automatic snapd restart...
+2026-04-26T16:26:15-04:00 INFO Waiting for automatic snapd restart...
+2026-04-26T16:26:24-04:00 INFO no handler for task "process-delayed-security-backend-effects", task
+ignored
+snapd 2.68.5 from Canonical✓ installed
+erin@erin-desktop:~/process-adherence-edge-project$ sudo snap refresh --hold snapd
+General refreshes of "snapd" held indefinitely
+erin@erin-desktop:~/process-adherence-edge-project$ python3 -m src.main configure --camera 0
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+
+=== ZONE CONFIGURATION MODE ===
+Click to draw polygon vertices on the camera feed.
+Press ENTER when a polygon is done, then name it in the terminal.
+
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+Zones saved (0 zones).
+
+── New zone ──
+  Zone name (e.g. A, B, C): A
+  Zone types: 0: pick_1, 1: pick_2, 2: pick_3, 3: pick_4, 4: walking, 5: working
+  Select zone type number: 0     
+  ✓ Zone 'A' (pick_1) added with 6 vertices.
+^CTraceback (most recent call last):
+  File "/usr/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/usr/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/home/erin/process-adherence-edge-project/src/main.py", line 194, in <module>
+    main()
+  File "/home/erin/process-adherence-edge-project/src/main.py", line 118, in main
+    zm = configurator.run()
+  File "/home/erin/process-adherence-edge-project/src/zone_config.py", line 99, in run
+    ret, frame = cap.read()
+KeyboardInterrupt
+
+erin@erin-desktop:~/process-adherence-edge-project$ python3 -m src.main configure --camera 0
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+
+=== ZONE CONFIGURATION MODE ===
+Click to draw polygon vertices on the camera feed.
+Press ENTER when a polygon is done, then name it in the terminal.
+
+
+── New zone ──
+  Zone name (e.g. A, B, C): A
+  Zone types: 0: pick_1, 1: pick_2, 2: pick_3, 3: pick_4, 4: walking, 5: working
+  Select zone type number: 0
+  ✓ Zone 'A' (pick_1) added with 6 vertices.
+
+── New zone ──
+  Zone name (e.g. A, B, C): B
+  Zone types: 0: pick_1, 1: pick_2, 2: pick_3, 3: pick_4, 4: walking, 5: working
+  Select zone type number: 2
+  ✓ Zone 'B' (pick_3) added with 7 vertices.
+
+── New zone ──
+  Zone name (e.g. A, B, C): C
+  Zone types: 0: pick_1, 1: pick_2, 2: pick_3, 3: pick_4, 4: walking, 5: working
+  Select zone type number: 2
+  ✓ Zone 'C' (pick_3) added with 5 vertices.
+
+── New zone ──
+  Zone name (e.g. A, B, C): work
+  Zone types: 0: pick_1, 1: pick_2, 2: pick_3, 3: pick_4, 4: walking, 5: working
+  Select zone type number: 5
+  ✓ Zone 'work' (working) added with 7 vertices.
+
+── New zone ──
+  Zone name (e.g. A, B, C): walk
+  Zone types: 0: pick_1, 1: pick_2, 2: pick_3, 3: pick_4, 4: walking, 5: working
+  Select zone type number: 4
+  ✓ Zone 'walk' (walking) added with 5 vertices.
+Zones saved (5 zones).
+
+Auto-saved 5 zone(s) on exit.
+erin@erin-desktop:~/process-adherence-edge-project$ python3 -m src.main run
+Loaded 5 zone(s).
+Loaded 3 trim config(s): A, B, C
+MQTT disabled — running in offline mode.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+
+=== RUN MODE ===
+Press 1-9 to set trim, N to start cycle, ENTER to end cycle, Q to quit.
+
+erin@erin-desktop:~/process-adherence-edge-project$ git pull
+remote: Enumerating objects: 40, done.
+remote: Counting objects: 100% (40/40), done.
+remote: Compressing objects: 100% (22/22), done.
+remote: Total 30 (delta 8), reused 30 (delta 8), pack-reused 0 (from 0)
+Unpacking objects: 100% (30/30), 137.76 KiB | 244.00 KiB/s, done.
+From https://github.com/erinmwalter/process-adherence-edge-project
+   d8f2a55..ecab7fb  main       -> origin/main
+Updating d8f2a55..ecab7fb
+Fast-forward
+ bandwidth_sim.py                                    | 122 ++++++++++++++++++++
+ docs/architecture.mmd                               |  43 +++++++
+ docs/architecture.png                               | Bin 0 -> 104143 bytes
+ docs/paper.md                                       |  42 ++++---
+ docs/paper.tex                                      |  77 +++++++------
+ docs/presentation.md                                | 134 ++++++++++++++++++++++
+ latency_sim.py                                      | 267 ++++++++++++++++++++++++++++++++++++++++++++
+ latency_sim_results.csv                             | 101 +++++++++++++++++
+ pc-dashboard/__pycache__/app.cpython-312.pyc        | Bin 0 -> 2589 bytes
+ pc-dashboard/__pycache__/db.cpython-312.pyc         | Bin 0 -> 7614 bytes
+ pc-dashboard/__pycache__/subscriber.cpython-312.pyc | Bin 0 -> 2695 bytes
+ pc-dashboard/cycles.db                              | Bin 0 -> 45056 bytes
+ results.txt                                         |  32 ++++++
+ results_latency_edge.txt                            |  24 ++++
+ send_trims.py                                       |  35 ++++++
+ src/__pycache__/__init__.cpython-312.pyc            | Bin 0 -> 191 bytes
+ src/__pycache__/benchmark.cpython-312.pyc           | Bin 0 -> 21458 bytes
+ src/__pycache__/detector.cpython-312.pyc            | Bin 0 -> 9749 bytes
+ src/__pycache__/main.cpython-312.pyc                | Bin 0 -> 8817 bytes
+ src/benchmark.py                                    | 144 ++++++++++++++++++++----
+ src/detector.py                                     |  86 +-------------
+ src/main.py                                         |  51 +++++++++
+ src/run_mode.py                                     |  44 +-------
+ 23 files changed, 1004 insertions(+), 198 deletions(-)
+ create mode 100644 bandwidth_sim.py
+ create mode 100644 docs/architecture.mmd
+ create mode 100644 docs/architecture.png
+ create mode 100644 docs/presentation.md
+ create mode 100644 latency_sim.py
+ create mode 100644 latency_sim_results.csv
+ create mode 100644 pc-dashboard/__pycache__/app.cpython-312.pyc
+ create mode 100644 pc-dashboard/__pycache__/db.cpython-312.pyc
+ create mode 100644 pc-dashboard/__pycache__/subscriber.cpython-312.pyc
+ create mode 100644 pc-dashboard/cycles.db
+ create mode 100644 results.txt
+ create mode 100644 results_latency_edge.txt
+ create mode 100644 send_trims.py
+ create mode 100644 src/__pycache__/__init__.cpython-312.pyc
+ create mode 100644 src/__pycache__/benchmark.cpython-312.pyc
+ create mode 100644 src/__pycache__/detector.cpython-312.pyc
+ create mode 100644 src/__pycache__/main.cpython-312.pyc
+erin@erin-desktop:~/process-adherence-edge-project$ python3 -m src.main run
+Loaded 5 zone(s).
+Loaded 3 trim config(s): A, B, C
+MQTT disabled — running in offline mode.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+
+=== RUN MODE ===
+Press 1-9 to set trim, N to start cycle, ENTER to end cycle, Q to quit.
+
+erin@erin-desktop:~/process-adherence-edge-project$ ya
+bash: ya: command not found
+erin@erin-desktop:~/process-adherence-edge-project$ git pul
+git: 'pul' is not a git command. See 'git --help'.
+
+The most similar commands are
+        pull
+        push
+erin@erin-desktop:~/process-adherence-edge-project$ git pull
+remote: Enumerating objects: 10, done.
+remote: Counting objects: 100% (10/10), done.
+remote: Compressing objects: 100% (3/3), done.
+remote: Total 6 (delta 3), reused 6 (delta 3), pack-reused 0 (from 0)
+Unpacking objects: 100% (6/6), 584 bytes | 194.00 KiB/s, done.
+From https://github.com/erinmwalter/process-adherence-edge-project
+   ecab7fb..7d6a34d  main       -> origin/main
+Updating ecab7fb..7d6a34d
+error: The following untracked working tree files would be overwritten by merge:
+        config/trims.json
+Please move or remove them before you merge.
+Aborting
+erin@erin-desktop:~/process-adherence-edge-project$ git pull
+Updating ecab7fb..7d6a34d
+Fast-forward
+ config/trims.json       | 5 +++++
+ src/sequence_tracker.py | 7 ++++---
+ 2 files changed, 9 insertions(+), 3 deletions(-)
+ create mode 100644 config/trims.json
+erin@erin-desktop:~/process-adherence-edge-project$ python -m src.main run --mqtt-host 192.168.1.170
+Loaded 5 zone(s).
+Loaded 3 trim config(s): A, B, C
+MQTT connected to 192.168.1.170:1883
+  Subscribed to: process_adherence/trim
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+
+=== RUN MODE ===
+Press 1-9 to set trim, N to start cycle, ENTER to end cycle, Q to quit.
+
+Cycle started — trim=B, sequence=['pick_2', 'walking', 'working']
+  !! DEVIATION: Expected pick_2, got walk
+  !! DEVIATION: Expected walking, got C
+  !! DEVIATION: Expected working, got B
+
+Cycle complete! Errors: 3, Time: 7.9s
+Cycle started — trim=A, sequence=['pick_1', 'walking', 'working']
+  !! DEVIATION: Expected pick_1, got B
+  !! DEVIATION: Expected walking, got A
+  !! DEVIATION: Expected working, got walk
+
+Cycle complete! Errors: 3, Time: 9.4s
+Cycle started — trim=B, sequence=['pick_2', 'walking', 'working']
+  !! DEVIATION: Expected pick_2, got B
+  !! DEVIATION: Expected walking, got C
+
+Auto-ended previous cycle (trim=B, errors=2, time=14.9s)
+Cycle started — trim=A, sequence=['pick_1', 'walking', 'working']
+  !! DEVIATION: Expected pick_1, got work
+  !! DEVIATION: Expected walking, got walk
+  !! DEVIATION: Expected working, got walk
+
+Cycle complete! Errors: 3, Time: 8.5s
+Cycle started — trim=A, sequence=['pick_1', 'walking', 'working']
+  !! DEVIATION: Expected pick_1, got work
+  !! DEVIATION: Expected walking, got B
+  !! DEVIATION: Expected working, got A
+
+Cycle complete! Errors: 3, Time: 5.2s
+Cycle started — trim=B, sequence=['pick_2', 'walking', 'working']
+  !! DEVIATION: Expected pick_2, got walk
+  !! DEVIATION: Expected walking, got work
+  !! DEVIATION: Expected working, got B
+
+Cycle complete! Errors: 3, Time: 8.9s
+Cycle started — trim=B, sequence=['pick_2', 'walking', 'working']
+  !! DEVIATION: Expected pick_2, got B
+  !! DEVIATION: Expected walking, got walk
+
+Auto-ended previous cycle (trim=B, errors=2, time=14.9s)
+Cycle started — trim=B, sequence=['pick_2', 'walking', 'working']
+  !! DEVIATION: Expected pick_2, got walk
+  !! DEVIATION: Expected walking, got work
+  !! DEVIATION: Expected working, got walk
+
+Cycle complete! Errors: 3, Time: 9.5s
+Cycle started — trim=C, sequence=['pick_3', 'walking', 'working']
+  !! DEVIATION: Expected pick_3, got work
+  !! DEVIATION: Expected walking, got C
+  !! DEVIATION: Expected working, got C
+
+Cycle complete! Errors: 3, Time: 7.9s
+Cycle started — trim=C, sequence=['pick_3', 'walking', 'working']
+  !! DEVIATION: Expected pick_3, got walk
+  !! DEVIATION: Expected walking, got walk
+erin@erin-desktop:~/process-adherence-edge-project$ python -m src.main run --mqtt-host 192.168.1.170
+Loaded 5 zone(s).
+Loaded 3 trim config(s): A, B, C
+MQTT connected to 192.168.1.170:1883
+  Subscribed to: process_adherence/trim
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+
+=== RUN MODE ===
+Press 1-9 to set trim, N to start cycle, ENTER to end cycle, Q to quit.
+
+Cycle started — trim=B, sequence=['pick_2', 'walking', 'working']
+  !! DEVIATION: Expected pick_2, got B
+  !! DEVIATION: Expected walking, got walk
+  !! DEVIATION: Expected working, got work
+
+Cycle complete! Errors: 3, Time: 21.0s
+Cycle started — trim=C, sequence=['pick_3', 'walking', 'working']
+  !! DEVIATION: Expected pick_3, got walk
+  !! DEVIATION: Expected walking, got walk
+
+Auto-ended previous cycle (trim=C, errors=2, time=25.0s)
+Cycle started — trim=B, sequence=['pick_2', 'walking', 'working']
+  !! DEVIATION: Expected pick_2, got work
+  !! DEVIATION: Expected walking, got walk
+  !! DEVIATION: Expected working, got work
+
+Cycle complete! Errors: 3, Time: 14.0s
+Cycle started — trim=C, sequence=['pick_3', 'walking', 'working']
+  !! DEVIATION: Expected pick_3, got C
+  !! DEVIATION: Expected walking, got walk
+
+Auto-ended previous cycle (trim=C, errors=2, time=24.8s)
+Cycle started — trim=C, sequence=['pick_3', 'walking', 'working']
+  !! DEVIATION: Expected pick_3, got C
+  !! DEVIATION: Expected walking, got walk
+  !! DEVIATION: Expected working, got work
+
+Cycle complete! Errors: 3, Time: 20.7s
+Cycle started — trim=C, sequence=['pick_3', 'walking', 'working']
+erin@erin-desktop:~/process-adherence-edge-project$ git pull
+remote: Enumerating objects: 11, done.
+remote: Counting objects: 100% (11/11), done.
+remote: Compressing objects: 100% (1/1), done.
+remote: Total 6 (delta 5), reused 6 (delta 5), pack-reused 0 (from 0)
+Unpacking objects: 100% (6/6), 2.00 KiB | 205.00 KiB/s, done.
+From https://github.com/erinmwalter/process-adherence-edge-project
+   7d6a34d..895887c  main       -> origin/main
+Updating 7d6a34d..895887c
+error: Your local changes to the following files would be overwritten by merge:
+        src/sequence_tracker.py
+Please commit your changes or stash them before you merge.
+Aborting
+erin@erin-desktop:~/process-adherence-edge-project$ git pull --rebase
+error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+erin@erin-desktop:~/process-adherence-edge-project$ git add.
+git: 'add.' is not a git command. See 'git --help'.
+
+The most similar command is
+        add
+erin@erin-desktop:~/process-adherence-edge-project$ git add .
+erin@erin-desktop:~/process-adherence-edge-project$ git commit -m "updates"
+Author identity unknown
+
+*** Please tell me who you are.
+
+Run
+
+  git config --global user.email "you@example.com"
+  git config --global user.name "Your Name"
+
+to set your account's default identity.
+Omit --global to set the identity only in this repository.
+
+fatal: unable to auto-detect email address (got 'erin@erin-desktop.(none)')
+erin@erin-desktop:~/process-adherence-edge-project$ git config --global user.name "erinmwalter"
+erin@erin-desktop:~/process-adherence-edge-project$ git push
+To https://github.com/erinmwalter/process-adherence-edge-project.git
+ ! [rejected]        main -> main (non-fast-forward)
+error: failed to push some refs to 'https://github.com/erinmwalter/process-adherence-edge-project.git'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. Integrate the remote changes (e.g.
+hint: 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+erin@erin-desktop:~/process-adherence-edge-project$ git pull --rebase
+error: cannot pull with rebase: Your index contains uncommitted changes.
+error: please commit or stash them.
+erin@erin-desktop:~/process-adherence-edge-project$ git stash
+Saved working directory and index state WIP on main: 7d6a34d updates
+erin@erin-desktop:~/process-adherence-edge-project$ git pull
+Updating 7d6a34d..895887c
+Fast-forward
+ pc-dashboard/cycles.db  | Bin 45056 -> 45056 bytes
+ src/sequence_tracker.py |   6 +-----
+ 2 files changed, 1 insertion(+), 5 deletions(-)
+erin@erin-desktop:~/process-adherence-edge-project$ python -m src.main run --mqtt-host 192.168.1.170
+Downloading https://github.com/ultralytics/assets/releases/download/v8.4.0/yolov8n-pose.pt to 'yolov8n-p
+Downloading https://github.com/ultralytics/assets/releases/download/v8.4.0/yolov8n-pose.pt to 'yolov8n-p
+Downloading https://github.com/ultralytics/assets/releases/download/v8.4.0/yolov8n-pose.pt to 'yolov8n-p
+Downloading https://github.com/ultralytics/assets/releases/download/v8.4.0/yolov8n-pose.pt to 'yolov8n-p
+Downloading https://github.com/ultralytics/assets/releases/download/v8.4.0/yolov8n-pose.pt to 'yolov8n-p
+Downloading https://github.com/ultralytics/assets/releases/download/v8.4.0/yolov8n-pose.pt to 'yolov8n-p
+Downloading https://github.com/ultralytics/assets/releases/download/v8.4.0/yolov8n-pose.pt to 'yolov8n-pose.pt': 100% ━━━━━━━━━━━━ 6.5MB 7.4MB/s 0.9s
+Loaded 5 zone(s).
+Loaded 3 trim config(s): A, B, C
+MQTT connected to 192.168.1.170:1883
+  Subscribed to: process_adherence/trim
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+
+=== RUN MODE ===
+Press 1-9 to set trim, N to start cycle, ENTER to end cycle, Q to quit.
+
+erin@erin-desktop:~/process-adherence-edge-project$ python -m src.main run --mqtt-host 192.168.1.170
+Loaded 5 zone(s).
+Loaded 3 trim config(s): A, B, C
+MQTT connected to 192.168.1.170:1883
+  Subscribed to: process_adherence/trim
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+
+=== RUN MODE ===
+Press 1-9 to set trim, N to start cycle, ENTER to end cycle, Q to quit.
+
+Cycle started — trim=C, sequence=['pick_3', 'walking', 'working']
+  !! DEVIATION: Expected pick_3, got C
+  !! DEVIATION: Expected walking, got walk
+
+Auto-ended previous cycle (trim=C, errors=2, time=25.1s)
+Cycle started — trim=C, sequence=['pick_3', 'walking', 'working']
+  !! DEVIATION: Expected pick_3, got C
+  !! DEVIATION: Expected walking, got walk
+  !! DEVIATION: Expected working, got work
+
+Cycle complete! Errors: 3, Time: 23.9s
+Cycle started — trim=B, sequence=['pick_2', 'walking', 'working']
+  !! DEVIATION: Expected pick_2, got B
+  !! DEVIATION: Expected walking, got walk
+  !! DEVIATION: Expected working, got work
+
+Cycle complete! Errors: 3, Time: 16.2s
+Cycle started — trim=B, sequence=['pick_2', 'walking', 'working']
+  !! DEVIATION: Expected pick_2, got B
+  !! DEVIATION: Expected walking, got walk
+  !! DEVIATION: Expected working, got work
+
+Cycle complete! Errors: 3, Time: 15.9s
+Cycle started — trim=B, sequence=['pick_2', 'walking', 'working']
+  !! DEVIATION: Expected pick_2, got B
+  !! DEVIATION: Expected walking, got walk
+  !! DEVIATION: Expected working, got work
+
+Cycle complete! Errors: 3, Time: 22.3s
+Cycle started — trim=B, sequence=['pick_2', 'walking', 'working']
+erin@erin-desktop:~/process-adherence-edge-project$ git pull
+remote: Enumerating objects: 11, done.
+remote: Counting objects: 100% (11/11), done.
+remote: Compressing objects: 100% (3/3), done.
+remote: Total 6 (delta 3), reused 6 (delta 3), pack-reused 0 (from 0)
+Unpacking objects: 100% (6/6), 1.11 KiB | 380.00 KiB/s, done.
+From https://github.com/erinmwalter/process-adherence-edge-project
+   895887c..ec62e98  main       -> origin/main
+Updating 895887c..ec62e98
+Fast-forward
+ config/trims.json      |   6 +++---
+ pc-dashboard/cycles.db | Bin 45056 -> 45056 bytes
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+erin@erin-desktop:~/process-adherence-edge-project$ python -m src.main run --mqtt-host 192.168.1.170
+Loaded 5 zone(s).
+Loaded 3 trim config(s): A, B, C
+MQTT connected to 192.168.1.170:1883
+  Subscribed to: process_adherence/trim
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QFontDatabase: Cannot find font directory /home/erin/.local/lib/python3.10/site-packages/cv2/qt/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+
+=== RUN MODE ===
+Press 1-9 to set trim, N to start cycle, ENTER to end cycle, Q to quit.
+
+Cycle started — trim=C, sequence=['C', 'walk', 'work']
+  Step 1: picked C [OK]
+  Step 2: picked walk [OK]
+  Step 3: picked work [OK]
+
+Cycle complete! Errors: 0, Time: 20.4s
+Cycle started — trim=C, sequence=['C', 'walk', 'work']
+  Step 1: picked C [OK]
+  Step 2: picked walk [OK]
+  Step 3: picked work [OK]
+
+Cycle complete! Errors: 0, Time: 15.5s
+Cycle started — trim=A, sequence=['A', 'walk', 'work']
+  Step 1: picked A [OK]
+  Step 2: picked walk [OK]
+  Step 3: picked work [OK]
+
+Cycle complete! Errors: 0, Time: 15.7s
+Cycle started — trim=C, sequence=['C', 'walk', 'work']
+  Step 1: picked C [OK]
+  Step 2: picked walk [OK]
+  Step 3: picked work [OK]
+
+Cycle complete! Errors: 0, Time: 16.7s
+Cycle started — trim=B, sequence=['B', 'walk', 'work']
+  !! DEVIATION: Expected B, got C
+  !! DEVIATION: Expected walk, got B
+  Step 3: picked work [OK]
+
+Cycle complete! Errors: 2, Time: 14.7s
+Cycle started — trim=C, sequence=['C', 'walk', 'work']
+  !! DEVIATION: Expected C, got A
+  Step 2: picked walk [OK]
+  Step 3: picked work [OK]
+
+Cycle complete! Errors: 1, Time: 16.6s
+Cycle started — trim=B, sequence=['B', 'walk', 'work']
+  Step 1: picked B [OK]
+  Step 2: picked walk [OK]
+  Step 3: picked work [OK]
+
+Cycle complete! Errors: 0, Time: 16.4s
+MQTT connected to 192.168.1.170:1883
+  Subscribed to: process_adherence/trim
+Cycle started — trim=C, sequence=['C', 'walk', 'work']
+  Step 1: picked C [OK]
+  Step 2: picked walk [OK]
+  Step 3: picked work [OK]
+
+Cycle complete! Errors: 0, Time: 16.9s
+Cycle started — trim=B, sequence=['B', 'walk', 'work']
+  Step 1: picked B [OK]
+  Step 2: picked walk [OK]
+  Step 3: picked work [OK]
+
+Cycle complete! Errors: 0, Time: 16.1s
+Cycle started — trim=B, sequence=['B', 'walk', 'work']
+  Step 1: picked B [OK]
+  Step 2: picked walk [OK]
+  Step 3: picked work [OK]
+
+Cycle complete! Errors: 0, Time: 14.4s
+Cycle started — trim=C, sequence=['C', 'walk', 'work']
+  Step 1: picked C [OK]
+  Step 2: picked walk [OK]
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+QFont::setPointSizeF: Point size <= 0 (-0.750000), must be greater than 0
+
+Auto-ended previous cycle (trim=C, errors=0, time=24.9s)
+Cycle started — trim=A, sequence=['A', 'walk', 'work']
+  Step 1: picked A [OK]
+  Step 2: picked walk [OK]
+  Step 3: picked work [OK]
+
+Cycle complete! Errors: 0, Time: 13.5s
+Cycle started — trim=B, sequence=['B', 'walk', 'work']
+
+Auto-ended previous cycle (trim=B, errors=0, time=24.9s)
+Cycle started — trim=A, sequence=['A', 'walk', 'work']
+  !! DEVIATION: Expected A, got walk
+
+Auto-ended previous cycle (trim=A, errors=1, time=25.2s)
+Cycle started — trim=B, sequence=['B', 'walk', 'work']
+erin@erin-desktop:~/process-adherence-edge-project$ 
